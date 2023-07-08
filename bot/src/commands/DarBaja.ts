@@ -1,4 +1,4 @@
-import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandOptionType } from "discord.js";
+import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandOptionType, CommandInteractionOption, CacheType } from "discord.js";
 import { Command } from "../Command";
 import { Alumno, AlumnoCarrera, AlumnoMateria, Carreras } from "../entities/Entities";
 import { DatabaseConnection } from "../DBConnection";
@@ -25,8 +25,9 @@ export const Darbaja: Command = {
       return;
     }
   
+    //const materiaOption: CommandInteractionOption<CacheType> | null = interaction.options.get("nombre");
     const materiaOption = interaction.options.get("nombre");
-  
+
     if (materiaOption) {
       const nombreMateria = materiaOption.value as string;
       const codigosMateria = await DatabaseConnection.getCodigosMateriasPorNombre(nombreMateria);

@@ -50,7 +50,7 @@ async function handleMateriaInteraction(
   carrera: number
 ) {
   const codigoMateria = await DatabaseConnection.getCodigoMateriaPorNombreYCarrera(nombreMateria, carrera);
-  
+
   if (!codigoMateria) {
     await interaction.followUp({
       content: `No se ha encontrado la materia para la carrera ${await DatabaseConnection.getNombreCarreraPorCodigo(carrera)}.`,
@@ -63,8 +63,15 @@ async function handleMateriaInteraction(
 
   if (correlativas?.includes("NULL")) {
     await saveMateriaInteraction(interaction, padron, codigoMateria);
-  }else if (correlativas) {
+  } else if (correlativas) {
     const alumnoMaterias = await DatabaseConnection.getAlumnoMateriasAprobadas(padron, carrera);
+    // let correlativasFaltantes: string[] = [];
+    // for (const correlativa of correlativas) {
+    //   if (!alumnoMaterias.includes(correlativa)) {
+    //     correlativasFaltantes.push(correlativa);
+    //   }
+    // }
+    
     const correlativasFaltantes = correlativas.filter((correlativa) => !alumnoMaterias.includes(correlativa));
     const correlativasFaltantesNombres = await DatabaseConnection.getNombreMateriasPorCodigo(correlativasFaltantes);
 
@@ -77,7 +84,7 @@ async function handleMateriaInteraction(
     } else {
       await saveMateriaInteraction(interaction, padron, codigoMateria);
     }
-  } 
+  }
 }
 
 async function saveMateriaInteraction(interaction: CommandInteraction, padron: number, codigoMateria: string) {
